@@ -25,6 +25,10 @@ app.use(cors({
 }));
 // * Servir o frontend estático da pasta "public" *
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
 
 // ===== Início da configuração de middleware =====
 
