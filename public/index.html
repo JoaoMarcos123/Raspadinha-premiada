@@ -793,4 +793,45 @@
     <script src="js/main.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raspadinha Premiada</title>
+</head>
+<body>
+  <h1>Bem-vindo à Raspadinha Premiada</h1>
 
+  <form id="cadastro-form">
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="email" id="email" placeholder="E-mail" required />
+    <input type="tel" id="telefone" placeholder="Telefone" required />
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <script>
+    document.getElementById("cadastro-form")?.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const nome = document.getElementById("nome")?.value;
+      const email = document.getElementById("email")?.value;
+      const telefone = document.getElementById("telefone")?.value;
+
+      fetch("https://raspadinha-backend.onrender.com/cadastrar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, email, telefone })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok || data.sucesso) alert("Cadastro feito com sucesso!");
+        else alert("Erro ao cadastrar: " + (data.mensagem || "Tente novamente."));
+      })
+      .catch(err => {
+        alert("Erro de conexão com o servidor.");
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
