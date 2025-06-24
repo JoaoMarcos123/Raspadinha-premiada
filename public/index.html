@@ -13,6 +13,36 @@
     <link rel="stylesheet" href="css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<script>
+document.getElementById("cadastro-form")?.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const nome = document.getElementById("nome")?.value;
+  const email = document.getElementById("email")?.value;
+  const telefone = document.getElementById("telefone")?.value;
+
+  fetch("https://raspadinha-backend.onrender.com/cadastrar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ nome, email, telefone })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok || data.sucesso) {
+      alert("Cadastro feito com sucesso!");
+      window.location.href = "/"; // ou a próxima etapa do seu site
+    } else {
+      alert("Erro ao cadastrar: " + (data.mensagem || "Tente novamente."));
+    }
+  })
+  .catch(err => {
+    alert("Erro de conexão com o servidor.");
+    console.error(err);
+  });
+});
+</script>
 <body>
     <div class="background-container">
         <!-- Aqui será carregada a imagem de fundo -->
