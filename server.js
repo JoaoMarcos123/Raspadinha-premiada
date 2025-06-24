@@ -1,8 +1,16 @@
 const express = require('express');
+app.use(cors({
+  origin: [
+    'https://raspadinhapremiada.blog.br'
+  ],
+  methods: ['GET','POST'],
+  credentials: true
+}));
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
