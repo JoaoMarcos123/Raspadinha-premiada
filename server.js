@@ -16,12 +16,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ===== Início da configuração de middleware =====
+
 // Body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // Serve os arquivos estáticos da pasta “public” mesmo em deploy no Render
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
+
 // Sessão
 app.use(session({
   secret: process.env.SESSION_SECRET || 'raspadinha-premiada-secret',
@@ -29,6 +32,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
+
 // ===== Fim da configuração de middleware =====
 
 // Arquivo de configuração para armazenar CNPJ, WhatsApp e e-mail
