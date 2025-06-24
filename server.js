@@ -1,18 +1,31 @@
 const express = require('express');
-app.use(cors({
-  origin: [
-    'https://raspadinhapremiada.blog.br'
-  ],
-  methods: ['GET','POST'],
-  credentials: true
-}));
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
+
+app.use(cors({
+  origin: [
+    'https://raspadinhapremiada.blog.br',
+    'https://www.raspadinhapremiada.blog.br'
+  ],
+  methods: ['GET','POST'],
+  credentials: true
+}));
 const path = require('path');
 const app = express();
+// * Configuração CORS para permitir chamadas do seu domínio *
+app.use(cors({
+  origin: [
+    'https://raspadinhapremiada.blog.br',
+    'https://www.raspadinhapremiada.blog.br'
+  ],
+  methods: ['GET','POST'],
+  credentials: true
+}));
+// * Servir o frontend estático da pasta "public" *
+app.use(express.static(path.join(__dirname, 'public')));
 const PORT = process.env.PORT || 3000;
 
 // ===== Início da configuração de middleware =====
