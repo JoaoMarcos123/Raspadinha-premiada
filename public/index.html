@@ -1,3 +1,48 @@
+document.getElementById("cadastro-form")?.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const telefone = document.getElementById("telefone").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const referralCode = document.getElementById("referral-code-input").value;
+
+  const errorBox = document.querySelector("#page-cadastro .auth-error");
+  const successBox = document.querySelector("#page-cadastro .auth-success");
+
+  errorBox.style.display = "none";
+  successBox.style.display = "none";
+
+  if (password !== confirmPassword) {
+    errorBox.innerText = "As senhas não coincidem!";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, telefone, password, referral_code_input: referralCode }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      successBox.innerText = "Cadastro realizado com sucesso!";
+      successBox.style.display = "block";
+      // Aqui você pode redirecionar ou mudar de página se quiser
+    } else {
+      errorBox.innerText = result.message || "Erro ao cadastrar.";
+      errorBox.style.display = "block";
+    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    errorBox.innerText = "Erro de conexão com o servidor.";
+    errorBox.style.display = "block";
+  }
+});
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
