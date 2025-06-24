@@ -13,7 +13,6 @@ app.use(cors({
   methods: ['GET','POST'],
   credentials: true
 }));
-const path = require('path');
 const app = express();
 // * Configuração CORS para permitir chamadas do seu domínio *
 app.use(cors({
@@ -25,7 +24,6 @@ app.use(cors({
   credentials: true
 }));
 // * Servir o frontend estático da pasta "public" *
-app.use(express.static(path.join(__dirname, 'public')));
 const PORT = process.env.PORT || 3000;
 
 // ===== Início da configuração de middleware =====
