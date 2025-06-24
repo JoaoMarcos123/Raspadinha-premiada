@@ -269,15 +269,17 @@ app.get('*', (req, res) => {
   }
 });
 
-// Iniciar o servidor
+// Inicia o servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(Servidor rodando na porta ${PORT});
+});
   
   // Criar arquivo de configuração se não existir
   if (!fs.existsSync(CONFIG_FILE)) {
     saveConfig({
       cnpj: '00.000.000/0001-00',
-      whatsapp: '5511999999999',
+      whatsapp: '5527998349634',
       email: 'contato@raspadinha-premiada.com'
     });
     console.log('Arquivo de configuração criado com valores padrão');
