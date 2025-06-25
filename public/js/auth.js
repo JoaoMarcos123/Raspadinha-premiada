@@ -34,64 +34,61 @@ const authModule = {
 
   // Função de cadastro
   handleRegister: async function (event) {
-    event.preventDefault();
-    const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
-    const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
-    const referralCodeInput = document.getElementById("referral-code-input").value.trim();
+  event.preventDefault();
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const referralCodeInput = document.getElementById("referral-code-input").value.trim();
 
-    const form = document.getElementById("cadastro-form");
-    const errorBox = form.querySelector(".auth-error");
-    const successBox = form.querySelector(".auth-success");
+  const form = document.getElementById("cadastro-form");
+  const errorBox = form.querySelector(".auth-error");
+  const successBox = form.querySelector(".auth-success");
 
-    // Esconder mensagens
-    errorBox.style.display = "none";
-    successBox.style.display = "none";
+  errorBox.style.display = "none";
+  successBox.style.display = "none";
 
-    // Validações
-    if (!nome || !email || !telefone || !password) {
-      errorBox.innerText = "Por favor, preencha todos os campos obrigatórios.";
-      errorBox.style.display = "block";
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      errorBox.innerText = "As senhas não coincidem.";
-      errorBox.style.display = "block";
-      return;
-    }
-
-    try {
-      const payload = { nome, email, telefone, password };
-      if (referralCodeInput) {
-        payload.referral_code_input = referralCodeInput;
-      }
-
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        successBox.innerText = "Cadastro realizado com sucesso!";
-        successBox.style.display = "block";
-        form.reset();
-        setTimeout(() => showPage("page-login"), 2000);
-      } else {
-        errorBox.innerText = result.message || "Erro ao cadastrar.";
-        errorBox.style.display = "block";
-      }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-      errorBox.innerText = "Erro de conexão com o servidor.";
-      errorBox.style.display = "block";
-    }
+  if (!nome || !email || !telefone || !password) {
+    errorBox.innerText = "Por favor, preencha todos os campos obrigatórios.";
+    errorBox.style.display = "block";
+    return;
   }
+
+  if (password !== confirmPassword) {
+    errorBox.innerText = "As senhas não coincidem.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  try {
+    const payload = { nome, email, telefone, password };
+    if (referralCodeInput) payload.referral_code_input = referralCodeInput;
+
+    // ✅ Aqui está a URL corrigida do seu backend
+    const response = await fetch("https://raspadinha-premiada.onrender.com/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      successBox.innerText = "Cadastro realizado com sucesso!";
+      successBox.style.display = "block";
+      form.reset();
+      setTimeout(() => showPage("page-login"), 2000);
+    } else {
+      errorBox.innerText = result.message || "Erro ao cadastrar.";
+      errorBox.style.display = "block";
+    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    errorBox.innerText = "Erro de conexão com o servidor.";
+    errorBox.style.display = "block";
+  }
+}
 };
 
 // Inicialização do módulo quando a página carregar
