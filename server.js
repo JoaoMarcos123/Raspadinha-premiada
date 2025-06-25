@@ -8,11 +8,19 @@ const cors = require('cors');
 const app = express();
 
 // ===== CORS =====
+const allowedOrigins = [
+  'https://raspadinhapremiada.blog.br',
+  'https://www.raspadinhapremiada.blog.br'
+];
+
 app.use(cors({
-  origin: [
-    'https://raspadinhapremiada.blog.br',
-    'https://www.raspadinhapremiada.blog.br'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origem não permitida pelo CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
   credentials: true
 }));
