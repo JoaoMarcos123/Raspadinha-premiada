@@ -244,48 +244,50 @@ const authModule = {
     },
     
     // Manipular cadastro
-    handleRegister: async function(event) {
-        event.preventDefault();
-        const nome = document.getElementById("nome").value;
-        const email = document.getElementById("email").value;
-        const telefone = document.getElementById("telefone").value.replace(/\D/g, ""); // Remove máscara
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirm-password").value;
-        const referralCodeInput = document.getElementById("referral-code-input").value.trim(); // Pega código de indicação
+handleRegister: async function(event) {
+    event.preventDefault();
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const telefone = document.getElementById("telefone").value.replace(/\D/g, ""); // Remove máscara
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    const referralCodeInput = document.getElementById("referral-code-input").value.trim(); // Pega código de indicação
 
-        if (!nome || !email || !telefone || !password) {
-            this.showAuthError("Por favor, preencha todos os campos obrigatórios.", document.getElementById("cadastro-form"));
-            return;
+    if (!nome || !email || !telefone || !password) {
+        this.showAuthError("Por favor, preencha todos os campos obrigatórios.", document.getElementById("cadastro-form"));
+        return;
+    }
+    if (telefone.length < 10 || telefone.length > 11) {
+        this.showAuthError("Telefone inválido. Use o formato (XX) XXXXX-XXXX.", document.getElementById("cadastro-form"));
+        return;
+    }
+    if (password !== confirmPassword) {
+        this.showAuthError("As senhas não coincidem.", document.getElementById("cadastro-form"));
+        return;
+    }
+
+    this.showAuthLoading(document.getElementById("cadastro-form"));
+    try {
+        const payload = { nome, email, telefone, password };
+        if (referralCodeInput) {
+            payload.referral_code_input = referralCodeInput;
         }
-        if (telefone.length < 10 || telefone.length > 11) { // Validação básica de tamanho
-             this.showAuthError("Telefone inválido. Use o formato (XX) XXXXX-XXXX.", document.getElementById("cadastro-form"));
-            return;
-        }
-        if (password !== confirmPassword) {
-            this.showAuthError("As senhas não coincidem.", document.getElementById("cadastro-form"));
-            return;
-        }
-        
-        this.showAuthLoading(document.getElementById("cadastro-form"));
-        try {
-            const payload = { nome, email, telefone, password };
-            if (referralCodeInput) {
-                payload.referral_code_input = referralCodeInput; // Envia código se preenchido
-            }
-            
-            const response = await apiModule.post("/auth/register", payload);
-            if (response && response.message && response.user) {
-                this.hideAuthLoading(document.getElementById("cadastro-form"));
-                this.showAuthSuccess("Cadastro realizado com sucesso! Faça login para continuar.", document.getElementById("cadastro-form"));
-                setTimeout(() => showPage("page-login"), 2000);
-            } else {
-                 throw new Error(response.message || "Resposta inválida do servidor.");
-            }
-        } catch (error) {
+
+        // 🔧 CORRIGIDO: agora chama a rota correta do backend
+        const response = await apiModule.post("/api/auth/register", payload);
+
+        if (response && response.message && response.user) {
             this.hideAuthLoading(document.getElementById("cadastro-form"));
-            this.showAuthError(error.message || "Erro ao fazer cadastro. Tente novamente.", document.getElementById("cadastro-form"));
+            this.showAuthSuccess("Cadastro realizado com sucesso! Faça login para continuar.", document.getElementById("cadastro-form"));
+            setTimeout(() => showPage("page-login"), 2000);
+        } else {
+            throw new Error(response.message || "Resposta inválida do servidor.");
         }
-    },
+    } catch (error) {
+        this.hideAuthLoading(document.getElementById("cadastro-form"));
+        this.showAuthError(error.message || "Erro ao fazer cadastro. Tente novamente.", document.getElementById("cadastro-form"));
+    }
+}
     
     // Manipular atualização de perfil
     handleProfileUpdate: async function(event) {
