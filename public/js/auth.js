@@ -65,13 +65,13 @@ const authModule = {
     const payload = { nome, email, telefone, password };
     if (referralCodeInput) payload.referral_code_input = referralCodeInput;
 
-    // ✅ Aqui está a URL corrigida do seu backend
-   const response = await fetch("https://raspadinha-premiada.onrender.com/api/auth/register", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload),
-  credentials: "include"
-});
+    // 🔧 CHAMADA CORRETA COM DOMÍNIO E CREDENCIAIS
+    const response = await fetch("https://raspadinha-premiada.onrender.com/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "include"
+    });
 
     const result = await response.json();
 
