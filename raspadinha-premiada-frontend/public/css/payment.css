@@ -1,0 +1,266 @@
+/* Estilos para o sistema de pagamento */
+
+/* Modal de pagamento */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.95);
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.4s;
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
+    color: white;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-button {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #f8f9fa;
+}
+
+/* Corpo do modal */
+.modal-body {
+    padding: 20px;
+}
+
+/* Rodapé do modal */
+.modal-footer {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Métodos de pagamento */
+.payment-methods {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.payment-method-btn {
+    padding: 10px 20px;
+    border: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.payment-method-btn.active {
+    border-color: #4c6ef5;
+    background-color: #edf2ff;
+    color: #4c6ef5;
+}
+
+/* Seção PIX */
+.pix-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.qr-code-container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code-container img {
+    display: block;
+    max-width: 200px;
+    height: auto;
+}
+
+.pix-instructions {
+    text-align: center;
+}
+
+.pix-code-container {
+    display: flex;
+    margin-top: 10px;
+}
+
+.pix-code-container input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+}
+
+.pix-code-container button {
+    padding: 8px 12px;
+    background-color: #4c6ef5;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+/* Seção de cartão de crédito */
+.credit-card-section {
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* Status do pagamento */
+.payment-status {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.payment-status p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.payment-status.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.payment-status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.payment-spinner {
+    margin: 10px auto;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #4c6ef5;
+    animation: spin 1s linear infinite;
+}
+
+/* Opções de pagamento */
+.payment-options {
+    margin: 20px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.payment-options h3 {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.payment-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 10px;
+    width: auto;
+}
+
+.payment-option label {
+    display: inline;
+    margin: 0;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
