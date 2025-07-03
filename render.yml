@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: raspadinha-premiada-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT src.main:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: raspadinha-premiada-db
+          property: connectionString
+      - key: ADMIN_EMAIL
+        value: admin@raspadinha.com
+
+databases:
+  - name: raspadinha-premiada-db
+    databaseName: raspadinha_premiada
+    user: raspadinha_user
+
