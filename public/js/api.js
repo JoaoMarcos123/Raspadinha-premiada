@@ -55,23 +55,19 @@ const apiModule = {
         return this.request(endpoint, { method: 'DELETE' });
     },
     
-        // API de autenticação
-    auth: {
-        // Login
         login: function(email, password) {
-            return apiModule.request("/auth/login", {
-                method: 'POST',
-                body: { email, password }
-            });
-        },
-        
-        // Registro
-        register: function(userData) {
-            return apiModule.request("/auth/register", {
-                method: 'POST',
-                body: userData
-            });
-        },
+    return apiModule.request("/api/auth/login", {
+        method: 'POST',
+        body: { email, password }
+    });
+},
+
+register: function(userData) {
+    return apiModule.request("/api/auth/register", {
+        method: 'POST',
+        body: userData
+    });
+},
         verify: function() {
             return apiModule.request("/auth/verify");
         },
