@@ -1,7 +1,7 @@
 // API Client para comunicação com o backend
 
 const apiModule = {
-    // Configurações base (corrigido para apontar para o backend na Render)
+    // Configurações base
     baseUrl: 'https://raspadinha-premiada.onrender.com/api',
 
     // Método genérico para requisições
@@ -15,26 +15,26 @@ const apiModule = {
                     'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
                 }
             };
-            
+
             // Mesclar opções
             const requestOptions = { ...defaultOptions, ...options };
-            
+
             // Converter body para JSON se for objeto
             if (requestOptions.body && typeof requestOptions.body === 'object') {
                 requestOptions.body = JSON.stringify(requestOptions.body);
             }
-            
+
             // Fazer requisição
             const response = await fetch(this.baseUrl + endpoint, requestOptions);
-            
+
             // Verificar status
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.message || `Erro ${response.status}: ${response.statusText}`);
             }
-            
-            // Retornar dados
-            return await response.json();
+
+            // Retornar dados (mesmo se resposta for vazia)
+            return await response.json().catch(() => ({}));
         } catch (error) {
             console.error(`Erro na requisição para ${endpoint}:`, error);
             throw error;
@@ -42,104 +42,105 @@ const apiModule = {
     },
 
     // Métodos HTTP específicos
-    get: function(endpoint) {
+    get(endpoint) {
         return this.request(endpoint, { method: 'GET' });
     },
-    post: function(endpoint, data) {
+    post(endpoint, data) {
         return this.request(endpoint, { method: 'POST', body: data });
     },
-    put: function(endpoint, data) {
+    put(endpoint, data) {
         return this.request(endpoint, { method: 'PUT', body: data });
     },
-    delete: function(endpoint) {
+    delete(endpoint) {
         return this.request(endpoint, { method: 'DELETE' });
     },
-    
-        login: function(email, password) {
-    return apiModule.request("/api/auth/login", {
-        method: 'POST',
-        body: { email, password }
-    });
-},
 
-register: function(userData) {
-    return apiModule.request("/api/auth/register", {
-        method: 'POST',
-        body: userData
-    });
-},
-        verify: function() {
+    // API de autenticação
+    auth: {
+        login(email, password) {
+            return apiModule.request("/auth/login", {
+                method: 'POST',
+                body: { email, password }
+            });
+        },
+        register(userData) {
+            return apiModule.request("/auth/register", {
+                method: 'POST',
+                body: userData
+            });
+        },
+        verify() {
             return apiModule.request("/auth/verify");
         },
-        updateProfile: function(userData) {
+        updateProfile(userData) {
             return apiModule.request("/auth/profile", {
                 method: 'PUT',
                 body: userData
             });
         }
     },
-    
+
     // API de jogos
     jogos: {
-        novoJogo: function(jogoData) {
+        novoJogo(jogoData) {
             return apiModule.request('/jogos/novo', {
                 method: 'POST',
                 body: jogoData
             });
         },
-        historico: function() {
+        historico() {
             return apiModule.request('/jogos/historico');
         },
-        solicitarSaque: function(saqueData) {
+        solicitarSaque(saqueData) {
             return apiModule.request('/jogos/saque', {
                 method: 'POST',
                 body: saqueData
             });
         },
-        historicoSaques: function() {
+        historicoSaques() {
             return apiModule.request('/jogos/saques');
         },
-        gerarPix: function(pixData) {
+        gerarPix(pixData) {
             return apiModule.request('/jogos/gerar-pix', {
                 method: 'POST',
                 body: pixData
             });
         },
-        verificarPagamento: function(pagamentoId) {
+        verificarPagamento(pagamentoId) {
             return apiModule.request(`/jogos/verificar-pagamento/${pagamentoId}`);
         }
     },
-    
+
     // API de administração
     admin: {
-        dashboard: function() {
+        dashboard() {
             return apiModule.request('/admin/dashboard');
         },
-        usuarios: function(page = 1, filter = '') {
+        usuarios(page = 1, filter = '') {
             return apiModule.request(`/admin/usuarios?page=${page}&filter=${filter}`);
         },
-        jogos: function(page = 1, dataInicio = '', dataFim = '', usuarioId = '') {
+        jogos(page = 1, dataInicio = '', dataFim = '', usuarioId = '') {
             return apiModule.request(`/admin/jogos?page=${page}&data_inicio=${dataInicio}&data_fim=${dataFim}&usuario_id=${usuarioId}`);
         },
-        saques: function(page = 1, status = '') {
+        saques(page = 1, status = '') {
             return apiModule.request(`/admin/saques?page=${page}&status=${status}`);
         },
-        processarSaque: function(saqueId, status) {
+        processarSaque(saqueId, status) {
             return apiModule.request(`/admin/saques/${saqueId}/processar`, {
                 method: 'PUT',
                 body: { status }
             });
         },
         relatorios: {
-            financeiro: function(dataInicio = '', dataFim = '') {
+            financeiro(dataInicio = '', dataFim = '') {
                 return apiModule.request(`/admin/relatorios/financeiro?data_inicio=${dataInicio}&data_fim=${dataFim}`);
             }
         },
         configuracoes: {
-            get: function() {
+            get() {
                 return apiModule.request('/admin/configuracoes');
             },
-            update: function(configData) {
+            update(configData) {
                 return apiModule.request('/admin/configuracoes', {
                     method: 'PUT',
                     body: configData
@@ -147,19 +148,19 @@ register: function(userData) {
             }
         }
     },
-    
+
     // API de integração com InfinityPay
     infinityPay: {
-        gerarPix: function(valor, descricao) {
+        gerarPix(valor, descricao) {
             return apiModule.request('/infinity-pay/gerar-pix', {
                 method: 'POST',
                 body: { valor, descricao }
             });
         },
-        verificarPagamento: function(transacaoId) {
+        verificarPagamento(transacaoId) {
             return apiModule.request(`/infinity-pay/verificar/${transacaoId}`);
         },
-        simularPagamento: function(transacaoId) {
+        simularPagamento(transacaoId) {
             return apiModule.request(`/infinity-pay/simular-pagamento/${transacaoId}`, {
                 method: 'POST'
             });
