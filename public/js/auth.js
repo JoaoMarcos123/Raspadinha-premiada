@@ -243,15 +243,15 @@ const authModule = {
         }
     },
     
-   // Manipular cadastro
+   // Manipular cadastro (sem usar apiModule)
 handleRegister: async function(event) {
     event.preventDefault();
     const nome = document.getElementById("nome").value;
     const email = document.getElementById("email").value;
-    const telefone = document.getElementById("telefone").value.replace(/\D/g, ""); // Remove máscara
+    const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
-    const referralCodeInput = document.getElementById("referral-code-input").value.trim(); // Código de indicação (opcional)
+    const referralCodeInput = document.getElementById("referral-code-input").value.trim();
 
     if (!nome || !email || !telefone || !password) {
         this.showAuthError("Por favor, preencha todos os campos obrigatórios.", document.getElementById("cadastro-form"));
@@ -269,20 +269,29 @@ handleRegister: async function(event) {
     }
 
     this.showAuthLoading(document.getElementById("cadastro-form"));
-    
+
     try {
-        const payload = { nome, email, telefone, password };
+        const payload = {
+            nome,
+            email,
+            telefone,
+            password
+        };
         if (referralCodeInput) {
             payload.referral_code_input = referralCodeInput;
         }
 
-        const response = await apiModule.post("/auth/register", payload);
+        const response = await fetch("https://raspadinha-premiada.onrender.com/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-        // ✅ CORRIGIDO: lidar com resposta 204 (sem conteúdo)
+        if (!response.ok) throw new Error("Erro no cadastro");
+
         this.hideAuthLoading(document.getElementById("cadastro-form"));
         this.showAuthSuccess("Cadastro realizado com sucesso! Faça login para continuar.", document.getElementById("cadastro-form"));
         setTimeout(() => showPage("page-login"), 2000);
-        
     } catch (error) {
         this.hideAuthLoading(document.getElementById("cadastro-form"));
         this.showAuthError(error.message || "Erro ao fazer cadastro. Tente novamente.", document.getElementById("cadastro-form"));
