@@ -55,14 +55,17 @@ const apiModule = {
         return this.request(endpoint, { method: 'DELETE' });
     },
     
-    // API de autenticação
+        // API de autenticação
     auth: {
+        // Login
         login: function(email, password) {
             return apiModule.request("/auth/login", {
                 method: 'POST',
                 body: { email, password }
             });
         },
+        
+        // Registro
         register: function(userData) {
             return apiModule.request("/auth/register", {
                 method: 'POST',
